@@ -1,6 +1,4 @@
-
 # Saralice Dialogue System Demo
-
 
 This is a demo of implementing [Saralice Dialogue System](https://github.com/saralice/saralice-dialogue-system).
 
@@ -21,10 +19,15 @@ Check the documentation for the dialogue system [here](https://github.com/sarali
 Here are the credits for the resources used:
 
 This  game  uses  Godot  Engine. [https://godotengine.org/license](https://godotengine.org/license)
+
 Sound effects obtained from [https://www.zapsplat.com](https://www.zapsplat.com)
+
 Background music: "Warped" by Alexander Ehlers.
+
 Backgrounds: [Uncle Mugen](https://lemmasoft.renai.us/forums/viewtopic.php?t=17302)
+
 Characters: [Sutemo](https://sutemo.itch.io/)
+
 Rubber duck photo: [https://www.pexels.com/photo/yellow-rubber-duck-by-a-swimming-pool-12111917/](https://www.pexels.com/photo/yellow-rubber-duck-by-a-swimming-pool-12111917/)
 
 ## License
