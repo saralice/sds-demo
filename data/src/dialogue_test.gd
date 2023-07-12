@@ -58,7 +58,7 @@ func _process(delta):
 func _on_sds_background_parsed(params:Dictionary):
 	assert(params.id in catalogs.backgrounds, "Background id not found: " + JSON.stringify(params))
 
-	assert(FileAccess.file_exists(catalogs.backgrounds[params.id]), "Cant load background texture: " + JSON.stringify(params))
+	assert(ResourceLoader.exists(catalogs.backgrounds[params.id]), "Cant load background texture: " + JSON.stringify(params))
 
 	var background_texture = load(catalogs.backgrounds[params.id])
 	background.texture = background_texture
@@ -82,7 +82,7 @@ func _on_sds_bgm_parsed(params:Dictionary):
 		Signals.stop_bgm.emit()
 	else:
 		assert(params.id in catalogs.bgm, "BGM id not found: " + JSON.stringify(params))
-		assert(FileAccess.file_exists(catalogs.bgm[params.id]), "Cant load bgm file: " + JSON.stringify(params))
+		assert(ResourceLoader.exists(catalogs.bgm[params.id]), "Cant load bgm file: " + JSON.stringify(params))
 
 		Signals.play_bgm.emit(params.id)
 
@@ -203,7 +203,7 @@ func _on_sds_image_parsed(params:Dictionary):
 		return
 
 	assert(params.id in catalogs.images, "Image id not found: " + JSON.stringify(params))
-	assert(FileAccess.file_exists(catalogs.images[params.id]), "Cant load image texture: " + JSON.stringify(params))
+	assert(ResourceLoader.exists(catalogs.images[params.id]), "Cant load image texture: " + JSON.stringify(params))
 
 	var image_texture = load(catalogs.images[params.id])
 	image.texture = image_texture
@@ -233,7 +233,7 @@ func _on_sds_name_parsed(params:Dictionary):
 
 func _on_sds_sfx_parsed(params:Dictionary):
 	assert(params.id in catalogs.sfx, "SFX id not found: " + JSON.stringify(params))
-	assert(FileAccess.file_exists(catalogs.sfx[params.id]), "Cant load sfx file: " + JSON.stringify(params))
+	assert(ResourceLoader.exists(catalogs.sfx[params.id]), "Cant load sfx file: " + JSON.stringify(params))
 
 	Signals.play_sfx.emit(params.id)
 
