@@ -1,0 +1,235 @@
+[gd_scene load_steps=8 format=3 uid="uid://d4equhaoqsisc"]
+
+[ext_resource type="Script" path="res://data/src/dialogue_test.gd" id="1_pgdfe"]
+[ext_resource type="Texture2D" uid="uid://dks02s6bwj71n" path="res://data/backgrounds/city.jpg" id="2_ftbur"]
+[ext_resource type="PackedScene" uid="uid://os1ioc3u0nt7" path="res://data/characters/character.tscn" id="3_8jb2n"]
+
+[sub_resource type="Animation" id="Animation_035d6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xw6km"]
+resource_name = "fade_in"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0jhr1"]
+resource_name = "fade_out"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7e566"]
+_data = {
+"RESET": SubResource("Animation_035d6"),
+"fade_in": SubResource("Animation_xw6km"),
+"fade_out": SubResource("Animation_0jhr1")
+}
+
+[node name="DialogueSystem" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_pgdfe")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("2_ftbur")
+centered = false
+
+[node name="Characters" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="Left" parent="Characters" instance=ExtResource("3_8jb2n")]
+visible = false
+position = Vector2(-192, 0)
+
+[node name="Center" parent="Characters" instance=ExtResource("3_8jb2n")]
+visible = false
+position = Vector2(132, 0)
+
+[node name="Right" parent="Characters" instance=ExtResource("3_8jb2n")]
+visible = false
+position = Vector2(456, 0)
+
+[node name="Image" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(640, 360)
+
+[node name="Dialogue" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -186.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Name" type="Control" parent="Dialogue"]
+anchors_preset = 0
+offset_left = 16.0
+offset_top = -40.0
+offset_right = 188.0
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="Dialogue/Name"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0.45098, 0.486275)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Dialogue/Name"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 3.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+text = "Name"
+
+[node name="Dialogue" type="Control" parent="Dialogue"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = -180.0
+offset_right = -11.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="Dialogue/Dialogue"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.545098)
+
+[node name="Text" type="RichTextLabel" parent="Dialogue/Dialogue"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 12.0
+offset_right = -11.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+
+[node name="Choices" type="Control" parent="Dialogue"]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ChoiceA" type="Button" parent="Dialogue/Choices"]
+layout_mode = 0
+offset_left = 526.0
+offset_top = -397.0
+offset_right = 811.0
+offset_bottom = -349.0
+
+[node name="ChoiceB" type="Button" parent="Dialogue/Choices"]
+layout_mode = 0
+offset_left = 526.0
+offset_top = -325.0
+offset_right = 811.0
+offset_bottom = -277.0
+
+[node name="ChoiceC" type="Button" parent="Dialogue/Choices"]
+layout_mode = 0
+offset_left = 526.0
+offset_top = -253.0
+offset_right = 811.0
+offset_bottom = -205.0
+
+[node name="ChoiceD" type="Button" parent="Dialogue/Choices"]
+layout_mode = 0
+offset_left = 526.0
+offset_top = -181.0
+offset_right = 811.0
+offset_bottom = -133.0
+
+[node name="Effects" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="Effects"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Effects"]
+libraries = {
+"": SubResource("AnimationLibrary_7e566")
+}
+
+[connection signal="meta_clicked" from="Dialogue/Dialogue/Text" to="." method="_on_text_meta_clicked"]
+[connection signal="button_up" from="Dialogue/Choices/ChoiceA" to="." method="_on_choice_button_up" binds= [0]]
+[connection signal="button_up" from="Dialogue/Choices/ChoiceB" to="." method="_on_choice_button_up" binds= [1]]
+[connection signal="button_up" from="Dialogue/Choices/ChoiceC" to="." method="_on_choice_button_up" binds= [2]]
+[connection signal="button_up" from="Dialogue/Choices/ChoiceD" to="." method="_on_choice_button_up" binds= [3]]

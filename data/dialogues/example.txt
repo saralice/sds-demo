@@ -1,0 +1,329 @@
+@label start
+@bgm city
+@bg city
+@char saralice.smile
+@name Saralice
+[p]Hello! This is a demo for "Saralice Dialogue System" plugin, a generic dialogue system for Godot 4 that you can use as a base, or edit it for your needs.[/p][p]You can press "Enter" key to display all text / advance (when all text is shown).[/p][p] [/p][p]The documentation for the add on is [url=https://github.com/saralice/saralice-dialogue-system][color=green]here[/color][/url] [/p][p]If you want to check this dialogue, you can do so in [color=aquamarine]res://data/dialogues/example.txt[/color][/p]
+[p]This plugin reads a file with a specific syntax. It will handle some commands automatically, and for others it will emit a signal that you will handle. In that case you will execute some code, and notify the plugin when you are done.[/p][p] [/p][p]You can see this scene script to view how I intercept the signals and the code that executes.[/p][p] [/p][p]In this demo, I created a resource "catalog" ([color=aquamarine]res://data/src/catalogs/catalogs.gd[/color]) that contains dictionaries with ids for the backgrounds, characters, etc. [/p]
+[p]Now, for the syntax: Each line has a command. The basic syntax for a command is [color=green]@command_name[/color] (for example: [color=green]@label[/color]).[/p][p] [/p][p]The only exceptions are that comments begin with # are ignored, and if a line doesn't contain a command then is assumed to be a dialogue. Also, empty lines are ignored.[/p][p] [/p][p]Some commands can have parameters. Each parameter is separated by space. They are in the form of [color=green]param:value[/color][/p]
+[p]This plugin adds an autoload called SDS (For Saralice Dialogue System). You will use its signals.[/p][p] [/p][p]We will start the dialogue with [color=green]SDS.start_invoked.emit(path_to_dialogue, label)[/color]. The [color=powderblue]path_to_dialogue[/color] is the dialogue file where you have the commands. And the [color=powderblue]label[/color] is the position where the script will start (you can check the label explanation in a moment).[/p][p] [/p][p]Also, when you need to get the next command, you will use [color=green]SDS.next_command_invoked.emit()[/color][/p]
+I will show you the available commands. Select the one that you want to know about to see an example of the command and the signal it emits.
+
+##########
+###MENU###
+##########
+@label menu_1
+Page 1
+@choice bg jump:bg_explain
+@choice bgm jump:bgm_explain
+@choice char jump:char_explain
+@choice >> jump:menu_2
+
+@label menu_2
+@char saralice.smile position:left
+Page 2
+@choice choice jump:choice_explain
+@choice dialogue jump:dialogue_explain
+@choice << jump:menu_1
+@choice >> jump:menu_3
+
+@label menu_3
+Page 3
+@choice dialogue_hide jump:dialogue_hide_explain
+@choice effect jump:effect_explain
+@choice << jump:menu_2
+@choice >> jump:menu_4
+
+@label menu_4
+Page 4
+@choice end jump:end_explain
+@choice function_async jump:function_async_explain
+@choice << jump:menu_3
+@choice >> jump:menu_5
+
+@label menu_5
+Page 5
+@choice function_sync jump:function_sync_explain
+@choice if/else/endif jump:if_else_endif_explain
+@choice << jump:menu_4
+@choice >> jump:menu_6
+
+@label menu_6
+Page 6
+@choice img jump:img_explain
+@choice jump jump:jump_explain
+@choice << jump:menu_5
+@choice >> jump:menu_7
+
+@label menu_7
+Page 7
+@choice label jump:label_explain
+@choice name jump:name_explain
+@choice << jump:menu_6
+@choice >> jump:menu_8
+
+@label menu_8
+Page 8
+@choice set jump:set_explain
+@choice sfx jump:sfx_explain
+@choice << jump:menu_7
+@choice >> jump:menu_9
+
+@label menu_9
+Page 9
+@choice signal jump:signal_explain
+@choice wait jump:wait_explain
+@choice << jump:menu_8
+@choice >> jump:menu_10
+
+@label menu_10
+Page 10
+@choice Exit tutorial jump:exit_tutorial
+@choice << jump:menu_9
+
+################
+###BG_EXPLAIN###
+################
+@label bg_explain
+[p][color=green]@bg[/color] shows/hide a background.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @bg id|HIDE [effect:effect_name][/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.background_parsed({"id": "city", "effect": "gray"})[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]id[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Id for the background, or **HIDE** if you want to hide the background[/cell][cell bg=darkslategray]effect[/cell][cell bg=darkslategray]No[/cell][cell bg=darkslategray]String[/cell][cell bg=darkslategray]Name of the effect. Default: null[/cell][/table]
+[p]I want to time travel to the park in the past: [color=green]@bg park effect:gray[/color][/p]
+@bg park effect:gray
+[p]If you want to hide a background, use [color=green]@bg HIDE[/color][/p][p]And now, return to the city.[/p]
+@bg city
+@jump menu_1
+
+#################
+###BGM_EXPLAIN###
+#################
+@label bgm_explain
+[p][color=green]@bgm[/color] plays/stop background music.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @bgm id|STOP[/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.bgm_parsed({"id": "city"})[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]id[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Id for the background music, or STOP if you want to stop the background music[/cell][/table]
+[p]For now, I will stop the music with [color=green]@bgm STOP[/color][/p]
+@bgm STOP
+And now we play it again with [color=green]@bgm city[/color]
+@bgm city
+@jump menu_1
+
+##################
+###CHAR_EXPLAIN###
+##################
+@label char_explain
+[p][color=green]@char[/color] shows/hides a character. [/p][p] [/p][p][color=aquamarine]Syntax[/color] @char id.expression|HIDE [position:position_name] [effect:effect_name] [wait:true][/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.char_parsed({"id": "saralice", "expression": "smile", "position":"left", "effect":"fade_in", "wait": true})[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]id.expression[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Id and an expression for a character (saralice.smile) or HIDE to hide a character[/cell][cell bg=darkslategray]position[/cell][cell bg=darkslategray]Yes[/cell][cell bg=darkslategray]String[/cell][cell bg=darkslategray]Position of the character (left/center/right).Default: left.[/cell][cell bg=dimgray]effect[/cell][cell bg=dimgray]No[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Effect name to apply to the character. Default: null[/cell][cell bg=darkslategray]wait[/cell][cell bg=darkslategray]No[/cell][cell bg=darkslategray]Bool[/cell][cell bg=darkslategray]Skip / Wait until effect animation is completed. Default: true[/cell][/table]
+[p]For now, I will invite a friend. Hey, come here, bro! ([color=green]@char bro.smile position:right effect:fade_in[/color])[/p]
+
+@char bro.smile position:right effect:fade_in
+@name Bro
+Did you call me?
+
+@char saralice.smug position:left
+@name Saralice
+You can leave now (I changed my expression with [color=green]@char saralice.smug position:left[/color])
+
+@char bro.surprised position:right
+@name Bro
+Ok, bye (I changed my expression with [color=green]@char bro.surprised position:right[/color], afterwards, I will hide it with [color=green]@char HIDE position:right[/color])
+@char HIDE position:right
+@char saralice.smile position:left
+@jump menu_1
+@end
+
+############
+###CHOICE###
+############
+@label choice_explain
+[p][color=green]@choice[/color] show choices. You can use multiple choices (one per line). When you select a choice, you can jump to the corresponding label.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @choice text jump:label_name[/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.choice_parsed({"choices": [{"choice": "A", "jump": "labelA"}, {"choice": "B", "jump": "labelB"}...]})[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]text[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Choice text[/cell][cell bg=darkslategray]jump[/cell][cell bg=darkslategray]Yes[/cell][cell bg=darkslategray]String[/cell][cell bg=darkslategray]Label to jump to when the choice is selected[/cell][/table]
+[p]I will ask you a question: Do you love me?[/p][p][color=green]@choice Yes jump:love_yes[/color][/p][p][color=green]@choice No jump:love_no[/color][/p]
+@choice Yes jump:love_yes
+@choice No jump:love_no
+
+@label love_yes
+@char saralice.smug position:left
+I knew it
+@jump menu_2
+
+@label love_no
+@char saralice.sad position:left
+How dare you! :'(
+@jump menu_2
+
+##############
+###DIALOGUE###
+##############
+@label dialogue_explain
+[p]Shows dialogue. For writing dialogue, you don't need a command, you just type it. If a line is not a command or comment, is assumed to be a dialogue.[/p][p] [/p][p][color=aquamarine]Syntax[/color] text[/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.dialogue_parsed({"text": "Hello world", "autofetch": false})[/p][p]Autofetch is true if the next command is a choice, false otherwise. You can use this flag to show the choices automatically when the dialogue ends.[/p]
+@jump menu_2
+
+###################
+###DIALOGUE_HIDE###
+###################
+@label dialogue_hide_explain
+[p][color=green]@dialogue_hide[/color] hides the dialogue window.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @dialogue_hide[/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.dialogue_hide_parsed()[/p]
+[p]I will hide it for now ([color=green]@dialogue_hide[/color]). Also, in 2 seconds I will say something.[/p]
+@dialogue_hide
+@wait 2.0
+Something! I told you :).
+@jump menu_3
+
+############
+###EFFECT###
+############
+@label effect_explain
+[p][color=green]@effect[/color] applies an effect. [/p][p] [/p][p][color=aquamarine]Syntax[/color] @effect id [wait:true][/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.effect_parsed({"id":"fade_in", "wait":true})[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]id[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Id for the effect[/cell][cell bg=darkslategray]wait[/cell][cell bg=darkslategray]No[/cell][cell bg=darkslategray]Bool[/cell][cell bg=darkslategray]Skip/Wait for animation to finish. Default: true[/cell][/table]
+[p]For now I will fade out the screen. After 2 seconds I will fade in (so you won't miss me)([color=green]@effect fade_out wait:true[/color]).[/p]
+@dialogue_hide
+@effect fade_out wait:true
+@wait 2.0
+@effect fade_in wait:true
+I'm back.
+@jump menu_3
+
+#########
+###END###
+#########
+@label end_explain
+[p][color=green]@end[/color] indicates that the script has finished its execution.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @end[/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.end_parsed()[/p]
+@jump menu_4
+
+
+####################
+###FUNCTION_ASYNC###
+####################
+@label function_async_explain
+[p][color=green]@function_async[/color] executes an asynchronous function (It doesn't wait for the function to complete).[/p][p] [/p][p][color=aquamarine]Syntax[/color] @function_async autoload_name.function_name [arg1 arg2 ... arg8][/p][p] [/p][p][color=powderblue]Signal emitted[/color] No signal emitted. It will be handled automatically.[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]autoload.name[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Autoload and name of the function to execute[/cell][cell bg=darkslategray]arg1...arg8[/cell][cell bg=darkslategray]No[/cell][cell bg=darkslategray]String[/cell][cell bg=darkslategray]Up to 8 arguments to use in the function, each one separated by a space.[/cell][/table]
+[p]I will call a function like this ([color=green]@function_async Tests.hello_async player[/color]).[/p]
+@dialogue_hide
+@function_async Tests.hello_async player
+The previous function printed a text in the Godot console. But I continue talking without waiting.
+@jump menu_4
+
+###################
+###FUNCTION_SYNC###
+###################
+@label function_sync_explain
+[p][color=green]@function_sync[/color] executes a synchronous function. It waits until it finishes.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @function_sync autoload_name.function_name [arg1 arg2 ... arg8][/p][p] [/p][p][color=powderblue]Signal emitted[/color] No signal emitted. It will be handled automatically.[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]autoload.name[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Autoload and name of the function to execute[/cell][cell bg=darkslategray]arg1...arg8[/cell][cell bg=darkslategray]No[/cell][cell bg=darkslategray]String[/cell][cell bg=darkslategray]Up to 8 arguments to use in the function, each one separated by a space.[/cell][/table]
+[p]I will call a function like this ([color=green]@function_sync Tests.hello_sync player[/color]).[/p]
+@dialogue_hide
+@function_sync Tests.hello_sync player
+The previous function printed a text in the Godot console.
+@jump menu_5
+
+
+###################
+###IF_ELSE_ENDIF###
+###################
+@label if_else_endif_explain
+[p][color=green]@if,@else,@endif[/color] These commands don't emit a signal. A condition is evaluated, and depending on the result, executes the "if" or the "else" block. If you want nested conditions, put another if block inside the else.The variables must exist in an autoload to detect them.[/p][p] [/p][p][color=powderblue]Signal emitted[/color] No signal emitted. It will be handled automatically.[/p]
+[p][color=aquamarine]Syntax[/color] [p]@if left_operand operator right_operand[/p][p]    code[/p][p][@else[/p][p]    code][/p][p]@endif[/p][/p][p] [/p]
+@img if_example
+[p]For this example, I have an autoload called [color=powderblue]State[/color] with 2 bool values: [color=powderblue]a=true[/color] and [color=powderblue]b=true[/color].[/p][p]And this is the example code. I should say "A is true, B is false"[/p]
+@if State.a == true
+	A is true
+	@if State.b == true
+		B is true
+	@else
+		B is false
+	@endif
+@else
+	A is false
+@endif
+
+@img HIDE
+
+@jump menu_5
+
+#########
+###IMG###
+#########
+@label img_explain
+[p][color=green]@img[/color] shows/hide an image.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @img id|HIDE [effect:name][/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.img_parsed({"id":"rubber_duck", "effect": null})[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]id[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Id for the image, or HIDE to hide it[/cell][cell bg=darkslategray]effect[/cell][cell bg=darkslategray]No[/cell][cell bg=darkslategray]String[/cell][cell bg=darkslategray]Effect name for the image. Default: null[/cell][/table]
+[p]I want to show you my rubber duck ([color=green]@img rubber_duck[/color]).[/p]
+@img rubber_duck
+I want to swim with my duck.
+@img HIDE
+@jump menu_6
+
+##########
+###JUMP###
+##########
+@label jump_explain
+[p][color=green]@jump[/color] "jumps" to the specified label, ignoring other commands.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @jump label_name[/p][p] [/p][p][color=powderblue]Signal emitted[/color] No signal emitted. It will be handled automatically.[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]name[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Label name[/cell][/table]
+[p]I use it to return to the menus in this tutorial. ([color=green]@jump menu_6[/color])[/p]
+@jump menu_6
+
+###########
+###LABEL###
+###########
+@label label_explain
+[p][color=green]@label[/color] defines a section. You can use it to start the dialogue in a specific point, or to jump to an specific label.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @label name[/p][p] [/p][p][color=powderblue]Signal emitted[/color] No signal emitted. It will be handled automatically.[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]name[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Label name[/cell][/table]
+[p]For example, I declared a label named start ([color=green]@label start[/color])[/p]
+@jump menu_7
+
+##########
+###NAME###
+##########
+@label name_explain
+[p][color=green]@name[/color] sets the character name.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @name name[/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.name_parsed({"name":"Saralice"})[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]name[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Character name[/cell][/table]
+[p]For example, if I want to change my name, I can do it with [color=green]@name Jenny[/color][/p]
+@name Jenny
+I'm Jenny!... Let's change to my original name.
+@name Saralice
+@jump menu_7
+
+#########
+###SET###
+#########
+@label set_explain
+[p][color=green]@set[/color] sets a value to a variable. The variable must exist in the autoload.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @set variable operator value[/p][p] [/p][p][color=powderblue]Signal emitted[/color] No signal emitted. It will be handled automatically.[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]variable[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Autoload variable to set value to[/cell][cell bg=darkslategray]operator[/cell][cell bg=darkslategray]Yes[/cell][cell bg=darkslategray]String[/cell][cell bg=darkslategray]Operator to use, like =, +=, -=[/cell][cell bg=dimgray]value[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Value to use[/cell][/table]
+[p]Example: [color=green]@set State.a = false[/color].[/p]
+@jump menu_8
+
+#################
+###SFX_EXPLAIN###
+#################
+@label sfx_explain
+[p][color=green]@sfx[/color] plays a sound effect.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @sfx id [wait:false][/p][p] [/p][p][color=powderblue]Signal emitted[/color] SDS.sfx_parsed({"id": "name", "wait": false})[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]id[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Id for the sound effect[/cell][cell bg=darkslategray]wait[/cell][cell bg=darkslategray]No[/cell][cell bg=darkslategray]Bool[/cell][cell bg=darkslategray]Wait for the sound effect to finish. Default: false[/cell][/table]
+[p]My cellphone will ring ([color=green]@sfx cellphone_ring wait:true[/color])[/p]
+@dialogue_hide
+@sfx cellphone_ring wait:true
+It was a wrong call.
+@jump menu_8
+
+############
+###SIGNAL###
+############
+@label signal_explain
+[p][color=green]@signal[/color] searches if an autoload has a signal with the specified name, and if found, it emits the signal.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @signal name [arg1 arg2 ... arg8][/p][p] [/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]name[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]String[/cell][cell bg=dimgray]Signal name[/cell][cell bg=darkslategray]arg1...arg8[/cell][cell bg=darkslategray]No[/cell][cell bg=darkslategray]String[/cell][cell bg=darkslategray]Up to 8 arguments to use in the signal, each one separated by a space.[/cell][/table]
+[p]I will emit a signal: [color=green]@signal sds_test hello[/color].[/p]
+@signal sds_test hello
+The previous command printed a text in the Godot console.
+@jump menu_9
+
+#########
+###WAIT###
+#########
+@label wait_explain
+[p][color=green]@wait[/color] pauses execution for the specified amount of seconds.[/p][p] [/p][p][color=aquamarine]Syntax[/color] @wait seconds[/p][p] [/p][p][color=powderblue]Signal emitted[/color] No signal emitted. It will be handled automatically.[/p]
+[table=4][cell bg=black]Parameter[/cell][cell bg=black]Required[/cell][cell bg=black]Type[/cell][cell bg=black]Value[/cell][cell bg=dimgray]seconds[/cell][cell bg=dimgray]Yes[/cell][cell bg=dimgray]Float[/cell][cell bg=dimgray]Number of seconds to wait[/cell][/table]
+[p]I will pause the execution for 3 seconds ([color=green]@wait 3.0[/color]).[/p]
+@dialogue_hide
+@wait 3.0
+I'm back.
+@jump menu_9
+
+@label exit_tutorial
+Goodbye
+@signal game_over
+@end

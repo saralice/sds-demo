@@ -1,0 +1,38 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="sds-demo"
+run/main_scene="res://data/src/dialogue_test.tscn"
+config/features=PackedStringArray("4.1", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+AudioManager="*res://audio/audio_manager.tscn"
+Signals="*res://autoloads/signals.gd"
+State="*res://autoloads/state.gd"
+SDS="*res://addons/saralice_dialogue_system/sds.gd"
+Tests="*res://autoloads/tests.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/saralice_dialogue_system/plugin.cfg")
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

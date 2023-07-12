@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dx75q5n3cpdi8"]
+
+[ext_resource type="Script" path="res://audio/audio_manager.gd" id="1"]
+
+[node name="AudioManager" type="Node"]
+process_mode = 3
+script = ExtResource("1")
+
+[node name="BgmPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="SfxPlayer" type="AudioStreamPlayer" parent="."]
+
+[connection signal="finished" from="SfxPlayer" to="." method="_on_sfx_player_finished"]

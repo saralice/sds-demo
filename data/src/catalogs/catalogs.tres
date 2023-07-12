@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Catalogs" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/src/catalogs/catalogs.gd" id="1_cyke5"]
+
+[resource]
+script = ExtResource("1_cyke5")
+lang = "en"
+music_volume = 1.0
+sfx_volume = 1.0
+full_screen = false

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bdkc01df844gl"
+path="res://.godot/imported/Alexander Ehlers - Warped.ogg-ea18249fb66b97c63798a8e7a5696227.oggvorbisstr"
+
+[deps]
+
+source_file="res://audio/bgm/Alexander Ehlers - Warped.ogg"
+dest_files=["res://.godot/imported/Alexander Ehlers - Warped.ogg-ea18249fb66b97c63798a8e7a5696227.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
