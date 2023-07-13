@@ -2,6 +2,8 @@
 
 This is a demo of implementing [Saralice Dialogue System](https://github.com/saralice/saralice-dialogue-system).
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/J3J8N368J)
+
 ## Getting started
 
 -   [Download a copy](https://github.com/saralice/sds-demo/archive/refs/heads/main.zip) of the addon, or clone the project.
